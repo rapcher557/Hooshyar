@@ -1,0 +1,132 @@
+<!-- DIS (DOWN) -->
+
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه پیدا نشد | 404</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/font.css" rel="stylesheet">
+    <style>
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        .robot-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        .robot-eye {
+            animation: blink 2s infinite;
+        }
+        .search-light {
+            box-shadow: 0 0 30px 10px rgba(255, 255, 0, 0.3);
+        }
+        .glow {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center font-[vazir] overflow-hidden">
+    <div class="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
+    <div class="relative z-10 container mx-auto px-4 flex flex-col items-center justify-center text-center">
+        <!-- Robot -->
+        <div class="relative mb-8 robot-float">
+            <!-- Robot body -->
+            <div class="w-48 h-64 bg-gray-300 rounded-t-full rounded-b-lg relative">
+                <!-- Robot head -->
+                <div class="w-32 h-32 bg-gray-400 rounded-full absolute -top-16 left-1/2 transform -translate-x-1/2 flex justify-center items-center">
+                    <!-- Eyes -->
+                    <div class="flex space-x-8">
+                        <div class="robot-eye w-6 h-8 bg-blue-600 rounded-full"></div>
+                        <div class="robot-eye w-6 h-8 bg-blue-600 rounded-full"></div>
+                    </div>
+                </div>
+                <!-- Antenna -->
+                <div class="w-2 h-12 bg-gray-500 absolute -top-12 left-1/2 transform -translate-x-1/2"></div>
+                <div class="w-6 h-2 bg-red-500 rounded-full absolute -top-12 left-1/2 transform -translate-x-1/2"></div>
+                <!-- Arms -->
+                <div class="absolute top-16 -left-8 w-8 h-24 bg-gray-400 rounded-lg transform -rotate-12"></div>
+                <div class="absolute top-16 -right-8 w-8 h-24 bg-gray-400 rounded-lg transform rotate-12"></div>
+                <!-- Screen -->
+                <div class="w-32 h-16 bg-gray-700 rounded-lg absolute top-20 left-1/2 transform -translate-x-1/2 flex items-center justify-center text-red-500 font-bold">
+                    404
+                </div>
+                <!-- Search light -->
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center">
+                    <div class="w-4 h-4 bg-yellow-300 rounded-full search-light"></div>
+                    <div class="w-24 h-2 bg-yellow-200 ml-1 rounded-r-full"></div>
+                </div>
+            </div>
+            <!-- Wheels -->
+            <div class="flex justify-center mt-2">
+                <div class="w-12 h-4 bg-gray-600 rounded-full mx-1"></div>
+                <div class="w-12 h-4 bg-gray-600 rounded-full mx-1"></div>
+            </div>
+        </div>
+
+        <!-- Error message -->
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 glow">اوه نه!</h1>
+        <h2 class="text-3xl md:text-4xl font-semibold mb-4">صفحه مورد نظر پیدا نشد</h2>
+        <p class="text-xl mb-8 max-w-lg">به نظر می‌رسد ربات کوچک ما نتوانست این صفحه را پیدا کند. شاید گم شده یا شاید اصلاً وجود نداشته!</p>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition duration-300 flex items-center justify-center">
+                <i class="fas fa-home ml-2"></i>
+                بازگشت به خانه
+            </a>
+            <button onclick="searchAgain()" class="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 rounded-lg font-medium transition duration-300 flex items-center justify-center">
+                <i class="fas fa-search ml-2"></i>
+                جستجوی دوباره
+            </button>
+        </div>
+
+        <!-- Floating elements -->
+        <div class="absolute -top-20 -left-20 w-40 h-40 bg-blue-500 rounded-full opacity-10 blur-xl"></div>
+        <div class="absolute -bottom-20 -right-20 w-60 h-60 bg-purple-500 rounded-full opacity-10 blur-xl"></div>
+    </div>
+
+    <script>
+        function searchAgain() {
+            const robot = document.querySelector('.robot-float');
+            const screen = document.querySelector('.w-32.h-16');
+            
+            // Add searching animation
+            robot.classList.add('animate-pulse');
+            screen.textContent = '...';
+            screen.classList.add('animate-pulse');
+            
+            // Simulate searching
+            setTimeout(() => {
+                screen.textContent = '404';
+                robot.classList.remove('animate-pulse');
+                screen.classList.remove('animate-pulse');
+                
+                // Show not found message
+                alert('متأسفیم! ربات ما هنوز نتوانست صفحه را پیدا کند.');
+            }, 2000);
+        }
+
+        // Add some random movement to the robot's antenna
+        setInterval(() => {
+            const antenna = document.querySelector('.w-2.h-12');
+            const randomAngle = Math.random() * 30 - 15;
+            antenna.style.transform = `translateX(-50%) rotate(${randomAngle}deg)`;
+        }, 3000);
+    </script>
+</body>
+</html>

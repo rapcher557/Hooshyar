@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>درخواست کلید API هوشیار</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .api-key-box {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+
+        .copy-btn:hover {
+            background-color: #334155;
+        }
+
+        .success-message {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <div class="mb-4">
+            <a href="/" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition duration-200">
+                <i class="fas fa-arrow-right ml-2"></i>
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">درخواست کلید API هوشیار</h1>
+            <p class="text-gray-600 mt-2">برای دسترسی به سرویس‌های هوش‌مصنوعی هوشیار، فرم زیر را تکمیل کنید</p>
+        </div>
+
+        <div id="request-form" class="bg-white rounded-xl shadow-md p-6 space-y-4">
+            <div class="space-y-1">
+                <label for="email" class="block text-sm font-medium text-gray-700">ایمیل</label>
+                <input type="email" id="email"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="example@domain.com" required>
+            </div>
+
+            <div class="space-y-1">
+                <label for="project" class="block text-sm font-medium text-gray-700">نام پروژه</label>
+                <input type="text" id="project"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="نام پروژه شما" required>
+            </div>
+
+            <div class="space-y-1">
+                <label for="domain" class="block text-sm font-medium text-gray-700">حوزه استفاده</label>
+                <select id="domain"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    required>
+                    <option value="" disabled selected>انتخاب کنید</option>
+                    <option value="web">توسعه وب</option>
+                    <option value="mobile">توسعه موبایل</option>
+                    <option value="ai">هوش مصنوعی</option>
+                    <option value="data">پردازش داده</option>
+                    <option value="other">سایر</option>
+                </select>
+            </div>
+
+            <div class="space-y-1">
+                <label for="notes" class="block text-sm font-medium text-gray-700">توضیحات اضافه (اختیاری)</label>
+                <textarea id="notes" rows="3"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="توضیحات بیشتر درباره پروژه..."></textarea>
+            </div>
+
+            <button id="submit-btn"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+                <span>ارسال درخواست</span>
+                <i class="fas fa-paper-plane mr-2"></i>
+            </button>
+        </div>
+
+        <div id="success-message" class="hidden success-message bg-white rounded-xl shadow-md p-6 mt-6">
+            <div class="flex items-center justify-center text-green-500 mb-4">
+                <i class="fas fa-check-circle text-4xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-center text-gray-800 mb-2">درخواست شما با موفقیت ثبت شد!</h2>
+            <p class="text-gray-600 text-center mb-4">کلید API شما در زیر ایجاد شده است. این کلید را در جای امن نگهداری
+                کنید.</p>
+
+            <div class="api-key-box rounded-lg p-4 flex items-center justify-between mb-4">
+                <code id="api-key" class="text-sm">loading...</code>
+                <button id="copy-btn" class="copy-btn p-2 rounded-md" title="کپی">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
+                <i class="fas fa-info-circle ml-2"></i>
+                این کلید فقط یک بار نمایش داده می‌شود. لطفاً آن را ذخیره کنید.
+            </div>
+
+            <button id="new-request-btn"
+                class="w-full mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition duration-200">
+                درخواست جدید
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('request-form');
+            const successMessage = document.getElementById('success-message');
+            const submitBtn = document.getElementById('submit-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const apiKeyElement = document.getElementById('api-key');
+            const newRequestBtn = document.getElementById('new-request-btn');
+
+            function generateAPIKey() {
+                const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+                let key = 'hsh_';
+                for (let i = 0; i < 32; i++) {
+                    key += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return key;
+            }
+
+            submitBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const email = document.getElementById('email').value;
+                const project = document.getElementById('project').value;
+                const domain = document.getElementById('domain').value;
+
+                if (!email || !project || !domain) {
+                    alert('لطفاً فیلدهای الزامی را تکمیل کنید');
+                    return;
+                }
+
+                submitBtn.innerHTML = '<span>در حال پردازش...</span>';
+                submitBtn.disabled = true;
+
+                setTimeout(() => {
+                    const apiKey = generateAPIKey();
+                    apiKeyElement.textContent = apiKey;
+
+                    form.classList.add('hidden');
+                    successMessage.classList.remove('hidden');
+
+                    submitBtn.innerHTML =
+                        '<span>ارسال درخواست</span><i class="fas fa-paper-plane mr-2"></i>';
+                    submitBtn.disabled = false;
+                }, 1500);
+            });
+
+            copyBtn.addEventListener('click', function () {
+                const apiKey = apiKeyElement.textContent;
+                navigator.clipboard.writeText(apiKey).then(() => {
+                    // Show copied feedback
+                    const originalIcon = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                    copyBtn.classList.add('text-green-400');
+
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalIcon;
+                        copyBtn.classList.remove('text-green-400');
+                    }, 2000);
+                });
+            });
+
+            newRequestBtn.addEventListener('click', function () {
+                form.reset();
+
+                form.classList.remove('hidden');
+                successMessage.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+
+</html>

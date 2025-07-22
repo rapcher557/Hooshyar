@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد تحلیل متن</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #0f172a;
+        }
+
+        .text-input {
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .text-input:focus {
+            box-shadow: inset 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .module-btn {
+            transition: all 0.3s ease;
+        }
+
+        .module-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .module-btn.active {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .result-card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .rewrite-card {
+            border-left: 4px solid #3b82f6;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .loading-dots:after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                content: '.';
+            }
+
+            40% {
+                content: '..';
+            }
+
+            60% {
+                content: '...';
+            }
+
+            80%,
+            100% {
+                content: '';
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-200 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-blue-400 mb-2">داشبورد تحلیل متن</h1>
+            <p class="text-gray-400">متن خود را وارد کنید و تحلیل‌های پیشرفته دریافت کنید</p>
+        </header>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-right">متن خود را وارد کنید</h2>
+            <textarea id="textInput"
+                class="text-input w-full h-48 p-4 bg-gray-800 border border-gray-700 rounded-xl text-right text-gray-200 focus:outline-none focus:border-blue-500 resize-none"
+                placeholder="متن مورد نظر خود را اینجا بنویسید..."></textarea>
+        </section>
+
+        <section class="mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button id="sentimentBtn" onclick="analyzeText('sentiment')"
+                    class="module-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="progress-bar absolute bottom-0 left-0 h-1 bg-blue-500"></div>
+                    <i class="fas fa-smile-beam text-2xl mb-2 text-yellow-400"></i>
+                    <span class="font-medium">تحلیل کامل محتوا</span>
+                </button>
+
+                <button id="fakeBtn" onclick="analyzeText('fake')"
+                    class="module-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="progress-bar absolute bottom-0 left-0 h-1 bg-blue-500"></div>
+                    <i class="fas fa-search text-2xl mb-2 text-red-400"></i>
+                    <span class="font-medium">تشخیص جعلی بودن</span>
+                </button>
+
+                <button id="rewriteBtn" onclick="analyzeText('rewrite')"
+                    class="module-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="progress-bar absolute bottom-0 left-0 h-1 bg-blue-500"></div>
+                    <i class="fas fa-edit text-2xl mb-2 text-purple-400"></i>
+                    <span class="font-medium">بازنویسی متن</span>
+                </button>
+                <button id="profanityBtn" onclick="analyzeText('profanity')"
+                    class="module-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="progress-bar absolute bottom-0 left-0 h-1 bg-blue-500"></div>
+                    <i class="fas fa-exclamation-triangle text-2xl mb-2 text-pink-400"></i>
+                    <span class="font-medium">تشخیص توهین</span>
+                </button>
+
+            </div>
+        </section>
+
+        <section id="resultsSection" class="hidden">
+            <h2 class="text-xl font-semibold mb-4 text-right">نتایج تحلیل</h2>
+
+            <div id="mainResult" class="result-card bg-gray-800 rounded-xl p-6 mb-6">
+                <div class="flex flex-col lg:flex-row gap-6">
+                    <div class="lg:w-2/3">
+                        <h3 class="text-lg font-medium mb-4 text-blue-400" id="resultTitle">تحلیل احساسات</h3>
+                        <p class="text-gray-300 leading-relaxed" id="resultText">
+                            در حال تحلیل متن... لطفا صبر کنید.
+                        </p>
+                    </div>
+
+                    <div class="lg:w-1/3">
+                        <div class="h-64">
+                            <canvas id="analysisChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="rewriteResult" class="hidden">
+                <h3 class="text-lg font-medium mb-4 text-right text-purple-400">متن بازنویسی شده</h3>
+                <div class="rewrite-card bg-gray-800 rounded-xl p-6 mb-6">
+                    <p class="text-gray-300 leading-relaxed" id="rewriteText">
+                        متن بازنویسی شده اینجا نمایش داده می‌شود.
+                    </p>
+                    <div class="mt-4 flex justify-end">
+                        <button id="copyRewriteBtn"
+                            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-copy ml-2"></i>
+                            کپی متن
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('copyRewriteBtn').addEventListener('click', copyRewriteText);
+        });
+    </script>
+    <!-- <script>
+        // Global variables
+        let currentAnalysisType = '';
+        let analysisChart = null;
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            document.getElementById('copyRewriteBtn').addEventListener('click', copyRewriteText);
+        });
+        
+        // Main analysis function
+        async function analyzeText(type) {
+            const textInput = document.getElementById('textInput').value.trim();
+            if (!textInput) {
+                alert('لطفاً متن مورد نظر خود را وارد کنید.');
+                return;
+            }
+            
+            currentAnalysisType = type;
+            resetUIForAnalysis();
+            showLoadingState(type);
+            
+            try {
+                const response = await sendAnalysisRequest(textInput, type);
+                processAnalysisResponse(response, type);
+            } catch (error) {
+                console.error('Error during analysis:', error);
+                document.getElementById('resultText').textContent = 'خطا در پردازش متن. لطفاً دوباره امتحان کنید.';
+            } finally {
+                hideLoadingState();
+            }
+        }
+        
+        // Reset UI elements before new analysis
+        function resetUIForAnalysis() {
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('rewriteResult').classList.add('hidden');
+            document.getElementById('keywordsResult').classList.add('hidden');
+            
+            if (analysisChart) {
+                analysisChart.destroy();
+            }
+        }
+        
+        // Show loading state
+        function showLoadingState(type) {
+            const buttons = document.querySelectorAll('.module-btn');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            const activeBtn = document.getElementById(`${type}Btn`);
+            activeBtn.classList.add('active');
+            
+            const progressBar = activeBtn.querySelector('.progress-bar');
+            progressBar.style.width = '100%';
+            
+            let loadingText = '';
+            switch(type) {
+                case 'sentiment':
+                    loadingText = 'در حال تحلیل احساسات متن';
+                    break;
+                case 'fake':
+                    loadingText = 'در حال بررسی صحت متن';
+                    break;
+                case 'grammar':
+                    loadingText = 'در حال استخراج کلمات کلیدی';
+                    break;
+                case 'rewrite':
+                    loadingText = 'در حال بازنویسی متن';
+                    break;
+            }
+            
+            document.getElementById('resultTitle').textContent = loadingText;
+            document.getElementById('resultText').innerHTML = `<span class="loading-dots">در حال پردازش</span>`;
+        }
+        
+        // Hide loading state
+        function hideLoadingState() {
+            const buttons = document.querySelectorAll('.module-btn');
+            buttons.forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('active');
+                const progressBar = btn.querySelector('.progress-bar');
+                progressBar.style.width = '0%';
+            });
+        }
+        
+        // Send analysis request to backend
+async function sendAnalysisRequest(text, type) {
+
+    let endpoint = '';
+
+    switch (type) {
+        case 'sentiment':
+        case 'fake':
+            endpoint = '../api/analyze.php';
+            break;
+        case 'rewrite':
+            endpoint = '../api/rewrite.php';
+            break;
+        case 'grammar':
+            endpoint = '../api/grammar.php';
+            break;
+        case 'profanity':
+            endpoint = '../api/profanity.php';
+            break;
+
+        default:
+            throw new Error("ماژول نامعتبر است");
+    }
+
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            text: text,
+            type: type
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+
+    return await response.json();
+}
+
+        
+        // Process the analysis response
+        function processAnalysisResponse(response, type) {
+    if (response.error) {
+        document.getElementById('resultText').textContent = response.error;
+        return;
+    }
+
+    switch(type) {
+        case 'sentiment':
+            displaySentimentAnalysis(response);
+            break;
+        case 'fake':
+            displayFakeAnalysis(response);
+            break;
+        case 'grammar':
+            displayKeywordAnalysis(response);
+            break;
+        case 'rewrite':
+            displayRewriteResult(response);
+            break;
+        case 'profanity':
+            displayProfanityAnalysis(response); // ✅ اضافه شد
+            break;
+    }
+}
+
+        
+        // Display sentiment analysis results
+        function displaySentimentAnalysis(data) {
+            document.getElementById('resultTitle').textContent = 'نتایج تحلیل احساسات';
+            
+            let sentimentText = '';
+            let sentimentColor = '';
+            
+            if (data.sentiment === 'مثبت') {
+                sentimentText = 'احساسات مثبت';
+                sentimentColor = 'text-green-400';
+            } else if (data.sentiment === 'منفی') {
+                sentimentText = 'احساسات منفی';
+                sentimentColor = 'text-red-400';
+            } else {
+                sentimentText = 'احساسات خنثی';
+                sentimentColor = 'text-gray-400';
+            }
+            
+            const confidencePercent = Math.round(data.confidence * 100);
+            
+            const resultHTML = `
+                <div class="mb-4">
+                    <span class="font-medium">نتیجه تحلیل:</span>
+                    <span class="${sentimentColor} font-bold mr-2">${sentimentText}</span>
+                    <span class="text-gray-400">(میزان اطمینان: ${confidencePercent}%)</span>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg">
+                    <p class="text-gray-300">${data.explanation}</p>
+                </div>
+            `;
+            
+            document.getElementById('resultText').innerHTML = resultHTML;
+            
+            // Create sentiment pie chart
+            createSentimentChart(data);
+        }
+        
+        // Create sentiment pie chart
+        function createSentimentChart(data) {
+            const ctx = document.getElementById('analysisChart').getContext('2d');
+            
+            const positive = data.sentiment === 'مثبت' ? data.confidence : 0;
+            const negative = data.sentiment === 'منفی' ? data.confidence : 0;
+            const neutral = data.sentiment === 'خنثی' ? data.confidence : 0;
+            
+            analysisChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['مثبت', 'منفی', 'خنثی'],
+                    datasets: [{
+                        data: [positive, negative, neutral],
+                        backgroundColor: [
+                            'rgba(74, 222, 128, 0.7)',
+                            'rgba(248, 113, 113, 0.7)',
+                            'rgba(156, 163, 175, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(74, 222, 128, 1)',
+                            'rgba(248, 113, 113, 1)',
+                            'rgba(156, 163, 175, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            rtl: true,
+                            labels: {
+                                font: {
+                                    family: 'Vazirmatn'
+                                },
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Display fake analysis results
+        function displayFakeAnalysis(data) {
+            document.getElementById('resultTitle').textContent = 'نتایج بررسی صحت متن';
+            
+            let fakeText = '';
+            let fakeColor = '';
+            
+            if (data.is_fake) {
+                fakeText = 'متن احتمالاً جعلی است';
+                fakeColor = 'text-red-400';
+            } else {
+                fakeText = 'متن احتمالاً واقعی است';
+                fakeColor = 'text-green-400';
+            }
+            
+            const confidencePercent = Math.round(data.fake_confidence * 100);
+            
+            const resultHTML = `
+                <div class="mb-4">
+                    <span class="font-medium">نتیجه بررسی:</span>
+                    <span class="${fakeColor} font-bold mr-2">${fakeText}</span>
+                    <span class="text-gray-400">(میزان اطمینان: ${confidencePercent}%)</span>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg">
+                    <p class="text-gray-300">${data.fake_explanation}</p>
+                </div>
+            `;
+            
+            document.getElementById('resultText').innerHTML = resultHTML;
+            
+            // Create fake detection chart
+            createFakeDetectionChart(data);
+        }
+        
+        // Create fake detection chart
+        function createFakeDetectionChart(data) {
+            const ctx = document.getElementById('analysisChart').getContext('2d');
+            
+            const fakeValue = data.is_fake ? data.fake_confidence : 0;
+            const realValue = data.is_fake ? 0 : data.fake_confidence;
+            
+            analysisChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['جعلی', 'واقعی'],
+                    datasets: [{
+                        data: [fakeValue, realValue],
+                        backgroundColor: [
+                            'rgba(248, 113, 113, 0.7)',
+                            'rgba(74, 222, 128, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(248, 113, 113, 1)',
+                            'rgba(74, 222, 128, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            rtl: true,
+                            labels: {
+                                font: {
+                                    family: 'Vazirmatn'
+                                },
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Display keyword analysis results
+        function displayKeywordAnalysis(data) {
+            document.getElementById('resultTitle').textContent = 'کلمات کلیدی استخراج شده';
+            document.getElementById('keywordsResult').classList.remove('hidden');
+            
+            // For demo purposes - in a real app, this would come from the API
+            const keywords = ['تحلیل', 'احساسات', 'متن', 'جعلی', 'کلیدی'];
+            
+            const keywordsContainer = document.getElementById('keywordsContainer');
+            keywordsContainer.innerHTML = '';
+            
+            keywords.forEach(keyword => {
+                const keywordElement = document.createElement('div');
+                keywordElement.className = 'bg-blue-900 text-blue-200 px-3 py-1 rounded-full text-sm';
+                keywordElement.textContent = keyword;
+                keywordsContainer.appendChild(keywordElement);
+            });
+            
+            document.getElementById('resultText').textContent = 'کلمات کلیدی مهم در متن شما شناسایی شدند.';
+            
+            // Hide chart for keyword analysis
+            document.querySelector('#mainResult .lg\\:w-1\\/3').classList.add('hidden');
+            document.querySelector('#mainResult .lg\\:w-2\\/3').classList.remove('lg:w-2/3');
+            document.querySelector('#mainResult .lg\\:w-2\\/3').classList.add('w-full');
+        }
+        
+        // Display rewrite results
+        function displayRewriteResult(data) {
+            document.getElementById('resultTitle').textContent = 'متن بازنویسی شده';
+            document.getElementById('rewriteResult').classList.remove('hidden');
+            
+            // For demo purposes - in a real app, this would come from the API
+            const rewrittenText = document.getElementById('textInput').value + "\n\n(این یک نسخه نمونه از متن بازنویسی شده است. در نسخه واقعی، متن بهینه‌تر خواهد بود.)";
+            
+            document.getElementById('rewriteText').textContent = rewrittenText;
+            document.getElementById('resultText').textContent = 'متن شما با حفظ معنا و بهبود ساختار بازنویسی شد.';
+            
+            // Hide chart for rewrite
+            document.querySelector('#mainResult .lg\\:w-1\\/3').classList.add('hidden');
+            document.querySelector('#mainResult .lg\\:w-2\\/3').classList.remove('lg:w-2/3');
+            document.querySelector('#mainResult .lg\\:w-2\\/3').classList.add('w-full');
+        }
+        
+        // Copy rewrite text to clipboard
+        function copyRewriteText() {
+            const rewriteText = document.getElementById('rewriteText').textContent;
+            navigator.clipboard.writeText(rewriteText).then(() => {
+                const copyBtn = document.getElementById('copyRewriteBtn');
+                const originalText = copyBtn.innerHTML;
+                
+                copyBtn.innerHTML = '<i class="fas fa-check ml-2"></i> متن کپی شد!';
+                copyBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                copyBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    copyBtn.classList.add('bg-purple-600', 'hover:bg-purple-700');
+                }, 2000);
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                alert('خطا در کپی کردن متن. لطفاً دوباره امتحان کنید.');
+            });
+        }
+    </script> -->
+</body>
+
+</html>

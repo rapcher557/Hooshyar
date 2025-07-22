@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>دریافت کلید API</title>
+  <style>
+    body {
+      font-family: "Vazir", sans-serif;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      background: #f1f3f5;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 { text-align: center; color: #333; }
+    input, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #0d6efd;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0b5ed7;
+    }
+    #result {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎯 دریافت کلید API</h2>
+  <input type="text" id="name" placeholder="نام (اختیاری)">
+  <input type="email" id="email" placeholder="ایمیل الزامی است" required>
+  <button onclick="getApiKey()">دریافت کلید</button>
+  <div id="result"></div>
+
+  <script>
+    async function getApiKey() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const resultBox = document.getElementById("result");
+
+      if (!email) {
+        alert("لطفاً ایمیل را وارد کنید.");
+        return;
+      }
+
+      const res = await fetch("register.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email })
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        resultBox.style.display = "block";
+        resultBox.innerText = "❌ خطا: " + data.error;
+      } else {
+        resultBox.style.display = "block";
+        resultBox.innerHTML = `
+          ✅ کلید API شما ساخته شد:<br><br>
+          <strong style="font-size: 18px; color: green">${data.api_key}</strong><br><br>
+          آن را در جای امنی نگه دارید. برای هر درخواست، این کلید لازم است.
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

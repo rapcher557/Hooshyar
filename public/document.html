@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مستندات API هوشیار</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569',
+                        },
+                        primary: {
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Vazirmatn', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .tab-content {
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        pre {
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        pre:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copied {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background-color: #4f46e5;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-900 min-h-screen text-gray-200">
+    <div class="container mx-auto px-4 py-8">
+        <nav class="mb-6 bg-dark-800 p-4 rounded-lg flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="#" class="text-primary-500 font-bold">هوشیار</a>
+                <a href="apiKey.html" class="text-gray-300 hover:text-primary-500 p-4">دریافت کلید API</a>
+            </div>
+        </nav>
+
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-primary-500 mb-2">مستندات API هوشیار</h1>
+            <p class="text-gray-400">راهنمای جامع برای استفاده از سرویس‌های پردازش متن هوشیار</p>
+        </header>
+
+        <div class="bg-dark-800 rounded-lg shadow-lg overflow-hidden">
+            <div class="border-b border-dark-700">
+                <nav class="flex flex-wrap -mb-px">
+                    <button
+                        class="tab-btn active mr-2 py-4 px-6 font-medium text-sm border-b-2 border-primary-500 text-primary-500"
+                        data-tab="analyze">
+                        تحلیل متن (Analyze)
+                    </button>
+                    <button
+                        class="tab-btn mr-2 py-4 px-6 font-medium text-sm border-b-2 border-transparent hover:text-gray-300 hover:border-gray-400"
+                        data-tab="rewrite">
+                        بازنویسی (Rewrite)
+                    </button>
+                    <button
+                        class="tab-btn mr-2 py-4 px-6 font-medium text-sm border-b-2 border-transparent hover:text-gray-300 hover:border-gray-400"
+                        data-tab="profanity">
+                        فیلتر الفاظ (Profanity)
+                    </button>
+                    <button
+                        class="tab-btn mr-2 py-4 px-6 font-medium text-sm border-b-2 border-transparent hover:text-gray-300 hover:border-gray-400"
+                        data-tab="grammar">
+                        تصحیح گرامر (Grammar)
+                    </button>
+                    <button
+                        class="tab-btn py-4 px-6 font-medium text-sm border-b-2 border-transparent hover:text-gray-300 hover:border-gray-400"
+                        data-tab="ai-call">
+                        فراخوان هوش مصنوعی (AI Call)
+                    </button>
+                </nav>
+            </div>
+
+            <div class="p-6">
+                <div id="analyze" class="tab-content active">
+                    <h2 class="text-2xl font-bold mb-4 text-primary-500">ماژول تحلیل متن</h2>
+                    <p class="mb-6 text-gray-300">این ماژول متن ورودی را از جنبه‌های مختلف تحلیل می‌کند و اطلاعاتی مانند
+                        احساس، موضوع و ویژگی‌های زبانی را استخراج می‌نماید.</p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">روش استفاده</h3>
+                        <div class="bg-dark-700 p-4 rounded-lg">
+                            <span class="text-green-400 font-mono">POST</span> <span
+                                class="font-mono">/req/v1/analyze</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه درخواست</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="analyze-request">{
+    "api_key": "your_api_key_here",
+    "text": "این یک متن نمونه برای تحلیل است. هوشیار ابزار بسیار مفیدی است!",
+    "language": "fa",
+    "features": ["sentiment", "topics", "entities"]
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('analyze-request')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه پاسخ</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="analyze-response">{
+    "status": "success",
+    "data": {
+        "sentiment": "positive",
+        "sentiment_score": 0.85,
+        "topics": ["ابزار", "تحلیل متن"],
+        "entities": [
+            {
+                "text": "هوشیار",
+                "type": "PRODUCT",
+                "score": 0.95
+            }
+        ],
+        "language": "fa",
+        "text_length": 56
+    },
+    "timestamp": "2023-07-15T12:34:56Z"
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('analyze-response')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3">پارامترها و توضیحات</h3>
+                        <div class="bg-dark-700 rounded-lg overflow-hidden">
+                            <table class="min-w-full">
+                                <thead class="bg-dark-600">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            پارامتر</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            نوع</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            الزامی</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            توضیحات</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-dark-600">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">api_key</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">بله</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">کلید API شما که از پنل کاربری دریافت
+                                            می‌شود</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">text</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">بله</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">متنی که می‌خواهید تحلیل شود (حداکثر
+                                            5000 کاراکتر)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">language</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">خیر</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">زبان متن (پیش‌فرض: fa برای فارسی)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">features</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">آرایه</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">خیر</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">ویژگی‌های تحلیل مورد نظر (پیش‌فرض:
+                                            همه ویژگی‌ها)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-4 bg-dark-700 rounded-lg">
+                        <h3 class="text-lg font-semibold mb-2 text-yellow-400">محدودیت‌ها و اعتبارسنجی</h3>
+                        <ul class="list-disc list-inside text-gray-300 space-y-2">
+                            <li>حداکثر طول متن: 5000 کاراکتر</li>
+                            <li>حداکثر درخواست در دقیقه: 30 درخواست برای هر API Key</li>
+                            <li>API Key باید در هدر درخواست با نام <code
+                                    class="bg-dark-600 px-1 py-0.5 rounded">X-API-Key</code> ارسال شود</li>
+                            <li>درخواست‌های نامعتبر با کد وضعیت 400 پاسخ داده می‌شوند</li>
+                            <li>برای API Keyهای نامعتبر کد وضعیت 403 برگردانده می‌شود</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="rewrite" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-4 text-primary-500">ماژول بازنویسی متن</h2>
+                    <p class="mb-6 text-gray-300">این ماژول متن ورودی را با حفظ معنا اما با ساختار متفاوت بازنویسی
+                        می‌کند.</p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">روش استفاده</h3>
+                        <div class="bg-dark-700 p-4 rounded-lg">
+                            <span class="text-green-400 font-mono">POST</span> <span
+                                class="font-mono">/req/v1/rewrite</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه درخواست</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="rewrite-request">{
+    "api_key": "your_api_key_here",
+    "text": "این محصول بسیار عالی است و من آن را به همه توصیه می‌کنم.",
+    "language": "fa",
+    "style": "formal"
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('rewrite-request')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه پاسخ</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="rewrite-response">{
+    "status": "success",
+    "data": {
+        "original_text": "این محصول بسیار عالی است و من آن را به همه توصیه می‌کنم.",
+        "rewritten_text": "این کالا از کیفیت بالایی برخوردار بوده و به تمامی افراد پیشنهاد می‌گردد.",
+        "language": "fa",
+        "style": "formal"
+    },
+    "timestamp": "2023-07-15T12:34:56Z"
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('rewrite-response')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3">پارامترها و توضیحات</h3>
+                        <div class="bg-dark-700 rounded-lg overflow-hidden">
+                            <table class="min-w-full">
+                                <thead class="bg-dark-600">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            پارامتر</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            نوع</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            الزامی</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            توضیحات</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-dark-600">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">api_key</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">بله</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">کلید API شما که از پنل کاربری دریافت
+                                            می‌شود</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">text</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">بله</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">متنی که می‌خواهید بازنویسی شود
+                                            (حداکثر 2000 کاراکتر)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">language</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">خیر</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">زبان متن (پیش‌فرض: fa برای فارسی)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">style</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">خیر</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">سبک بازنویسی (مقادیر ممکن: formal,
+                                            informal, simple, professional - پیش‌فرض: formal)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="profanity" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-4 text-primary-500">ماژول فیلتر الفاظ ناپسند</h2>
+                    <p class="mb-6 text-gray-300">این ماژول متن ورودی را بررسی کرده و واژه‌ها و عبارات نامناسب را
+                        شناسایی و فیلتر می‌کند.</p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">روش استفاده</h3>
+                        <div class="bg-dark-700 p-4 rounded-lg">
+                            <span class="text-green-400 font-mono">POST</span> <span
+                                class="font-mono">/req/v1/profanity</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه درخواست</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="profanity-request">{
+    "api_key": "your_api_key_here",
+    "text": "این متن شامل برخی کلمات نامناسب است که باید فیلتر شوند.",
+    "language": "fa",
+    "action": "filter"
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('profanity-request')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه پاسخ</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="profanity-response">{
+    "status": "success",
+    "data": {
+        "original_text": "این متن شامل برخی کلمات نامناسب است که باید فیلتر شوند.",
+        "filtered_text": "این متن شامل برخی کلمات *** است که باید فیلتر شوند.",
+        "profanity_count": 1,
+        "detected_words": ["نامناسب"],
+        "language": "fa"
+    },
+    "timestamp": "2023-07-15T12:34:56Z"
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('profanity-response')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3">پارامترها و توضیحات</h3>
+                        <div class="bg-dark-700 rounded-lg overflow-hidden">
+                            <table class="min-w-full">
+                                <thead class="bg-dark-600">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            پارامتر</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            نوع</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            الزامی</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            توضیحات</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-dark-600">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">api_key</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">بله</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">کلید API شما که از پنل کاربری دریافت
+                                            می‌شود</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">text</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">بله</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">متنی که می‌خواهید بررسی شود (حداکثر
+                                            5000 کاراکتر)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">language</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">خیر</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">زبان متن (پیش‌فرض: fa برای فارسی)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">action</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">خیر</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">نوع عمل (مقادیر ممکن: detect,
+                                            filter, replace - پیش‌فرض: filter)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="grammar" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-4 text-primary-500">ماژول تصحیح گرامر</h2>
+                    <p class="mb-6 text-gray-300">این ماژول متن ورودی را از نظر دستوری بررسی کرده و اشکالات گرامری را
+                        تصحیح می‌نماید.</p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">روش استفاده</h3>
+                        <div class="bg-dark-700 p-4 rounded-lg">
+                            <span class="text-green-400 font-mono">POST</span> <span
+                                class="font-mono">/req/v1/grammar</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه درخواست</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="grammar-request">{
+    "api_key": "your_api_key_here",
+    "text": "من دیروز به کتابخانه رفت و چندتا کتاب گرفتم.",
+    "language": "fa"
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('grammar-request')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه پاسخ</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="grammar-response">{
+    "status": "success",
+    "data": {
+        "original_text": "من دیروز به کتابخانه رفت و چندتا کتاب گرفتم.",
+        "corrected_text": "من دیروز به کتابخانه رفتم و چند کتاب گرفتم.",
+        "corrections": [
+            {
+                "original": "رفت",
+                "corrected": "رفتم",
+                "reason": "عدم تطابق فعل با فاعل"
+            },
+            {
+                "original": "چندتا",
+                "corrected": "چند",
+                "reason": "استفاده نادرست از کلمه محاوره‌ای در متن رسمی"
+            }
+        ],
+        "language": "fa"
+    },
+    "timestamp": "2023-07-15T12:34:56Z"
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('grammar-response')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3">پارامترها و توضیحات</h3>
+                        <div class="bg-dark-700 rounded-lg overflow-hidden">
+                            <table class="min-w-full">
+                                <thead class="bg-dark-600">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            پارامتر</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            نوع</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            الزامی</th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            توضیحات</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-dark-600">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">api_key</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">بله</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">کلید API شما که از پنل کاربری دریافت
+                                            می‌شود</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">text</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">بله</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">متنی که می‌خواهید تصحیح شود (حداکثر
+                                            5000 کاراکتر)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">language</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">خیر</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">زبان متن (پیش‌فرض: fa برای فارسی)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">style</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">رشته</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">خیر</td>
+                                        <td class="px-6 py-4 text-sm text-gray-300">سبک متن (مقادیر ممکن: formal,
+                                            informal - پیش‌فرض: formal)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="ai-call" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-4 text-primary-500">فراخوان هوش مصنوعی</h2>
+                    <p class="mb-6 text-gray-300">این بخش مستقیماً با مدل هوش مصنوعی هوشیار در ارتباط است و می‌تواند
+                        برای کاربردهای عمومی استفاده شود.</p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">روش استفاده</h3>
+                        <div class="bg-dark-700 p-4 rounded-lg">
+                            <span class="text-green-400 font-mono">POST</span> <span
+                                class="font-mono">/req/v1/ai/call</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه درخواست</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="ai-call-request">{
+    "api_key": "your_api_key_here",
+    "prompt": "خلاصه‌ای از مقاله زیر به زبان ساده بنویسید:",
+    "context": "متن مقاله...",
+    "language": "fa"
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('ai-call-request')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-3">نمونه پاسخ</h3>
+                        <div class="relative">
+                            <pre class="bg-dark-700 p-4 rounded-lg overflow-x-auto"><code id="ai-call-response">{
+    "status": "success",
+    "data": {
+        "response": "خلاصه مقاله به زبان ساده...",
+        "language": "fa",
+        "tokens_used": 256
+    },
+    "timestamp": "2023-07-15T12:34:56Z"
+}</code></pre>
+                            <button
+                                class="copy-btn bg-dark-600 hover:bg-dark-500 text-gray-300 px-2 py-1 rounded text-xs"
+                                onclick="copyCode('ai-call-response')">
+                                <i class="fas fa-copy mr-1"></i> کپی
+                            </button>
+                            <span class="copied">کپی شد!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active', 'border-primary-500',
+                    'text-primary-500'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active', 'border-primary-500', 'text-primary-500');
+
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        function copyCode(elementId) {
+            const codeElement = document.getElementById(elementId);
+            const range = document.createRange();
+            range.selectNode(codeElement);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+
+            const copyBtn = codeElement.nextElementSibling;
+            const copiedMsg = copyBtn.nextElementSibling;
+            copiedMsg.style.display = 'block';
+            setTimeout(() => {
+                copiedMsg.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

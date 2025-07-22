@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>درباره هوش‌یار | سامانه هوشمند تحلیل متون فارسی</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 50%;
+            top: 100%;
+            height: 20px;
+            width: 2px;
+            background: #e2e8f0;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.1);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                        <i class="fas fa-brain text-indigo-600 text-xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold">هوش‌یار</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8 space-x-reverse">
+                        <li><a href="/" class="hover:text-indigo-200 transition">صفحه اصلی</a></li>
+                    </ul>
+                </nav>
+                <button class="md:hidden text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">سامانه هوشمند تحلیل متون فارسی</h2>
+                    <p class="text-lg mb-6 leading-relaxed">
+                        هوش‌یار با استفاده از پیشرفته‌ترین مدل‌های هوش مصنوعی، ابزارهای قدرتمندی برای تحلیل، پردازش و
+                        بهینه‌سازی متون فارسی ارائه می‌دهد.
+                    </p>
+                    <div class="flex space-x-4 space-x-reverse">
+                        <a href="dashboard.html"><button
+                                class="bg-white text-indigo-600 px-6 py-2 rounded-lg font-bold hover:bg-indigo-100 transition">
+                                امتحان کنید
+                            </button></a>
+
+                        <a href="document.html"><button
+                                class="border border-white px-6 py-2 rounded-lg font-bold hover:bg-white hover:text-indigo-600 transition">
+                                مستندات API
+                            </button></a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative">
+                        <div
+                            class="w-64 h-64 md:w-80 md:h-80 bg-indigo-400 rounded-full opacity-20 absolute -top-6 -right-6">
+                        </div>
+                        <div
+                            class="w-64 h-64 md:w-80 md:h-80 bg-white rounded-2xl shadow-xl flex items-center justify-center relative">
+                            <i class="fas fa-robot text-indigo-600 text-8xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Introduction -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">هوش‌یار چیست؟</h2>
+                <div class="w-20 h-1 bg-indigo-600 mx-auto"></div>
+            </div>
+
+            <div class="flex flex-col md:flex-row mb-12">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        «هوش‌یار» یک سامانه هوشمند تحلیل متون فارسی است که با هدف ارائه راهکارهای پیشرفته و تخصصی در
+                        زمینه پردازش زبان طبیعی طراحی شده است. این سامانه با بهره‌گیری از پیشرفته‌ترین مدل هوش مصنوعی
+                        جهان، GPT-4.1، توانسته است ابزارهایی دقیق، سریع و قابل اعتماد برای تحلیل، اصلاح و بهینه‌سازی
+                        متون فارسی فراهم آورد.
+
+                        هوش‌یار قادر است در حوزه‌های مختلفی مانند تشخیص جعلی بودن اخبار، تحلیل احساسات متون، اصلاح
+                        نگارشی، تشخیص محتواهای توهین‌آمیز و بازنویسی هوشمند متن فعالیت کند. این ویژگی‌ها به کاربران کمک
+                        می‌کند تا علاوه بر بهبود کیفیت نوشتار خود، در برابر اطلاعات نادرست و پیام‌های مخرب هوشمندانه‌تر
+                        و آگاه‌تر عمل کنند.
+
+                        این سامانه با استفاده از API اختصاصی و توسعه‌یافته خود، امکان اتصال و ادغام با نرم‌افزارها و
+                        پلتفرم‌های مختلف را فراهم می‌کند؛ به طوری که توسعه‌دهندگان می‌توانند به راحتی قابلیت‌های هوش
+                        مصنوعی بومی‌شده و تخصصی در زبان فارسی را در پروژه‌های خود پیاده‌سازی کنند.
+
+                        هوش‌یار نه تنها یک ابزار کاربردی برای کاربران عادی و متخصصان زبان و رسانه است، بلکه بستری آموزشی
+                        و تحقیقاتی برای علاقه‌مندان به هوش مصنوعی و زبان‌شناسی محاسباتی فراهم کرده است. این پروژه با هدف
+                        ارتقای سطح سواد رسانه‌ای و نگارشی جامعه فارسی‌زبان شکل گرفته و تلاش می‌کند سهمی موثر در تقویت
+                        زیرساخت‌های فناوری هوش مصنوعی کشور داشته باشد.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed">
+                        هدف ما از ساخت این سامانه، ارائه هوش مصنوعی‌ای کاملاً بومی‌سازی‌شده است که متناسب با نیازها و
+                        فرهنگ زبان فارسی طراحی شده باشد.
+                    </p>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">اهداف پروژه</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 ml-2"></i>
+                                <span>فراهم‌کردن بستری ساده، سریع و قدرتمند برای تحلیل هوشمند متون فارسی</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 ml-2"></i>
+                                <span>مقابله با گسترش اخبار جعلی در فضای مجازی</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 ml-2"></i>
+                                <span>افزایش سواد رسانه‌ای و نگارشی کاربران</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 ml-2"></i>
+                                <span>ارائه سرویس API برای توسعه‌دهندگان جهت گسترش این قابلیت‌ها در نرم‌افزارهای
+                                    دیگر</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 ml-2"></i>
+                                <span>
+                                    هدف اصلی این پروژه، توسعه‌ی یک سامانه هوش مصنوعی کاملاً بومی‌سازی‌شده و منطبق با
+                                    قوانین جمهوری اسلامی ایران بوده است. خوشبختانه امروز با افتخار اعلام می‌کنیم که به
+                                    این هدف دست یافته‌ایم و از پیشرفته‌ترین مدل هوش مصنوعی جهان، یعنی GPT-4.1، بهره
+                                    می‌گیریم. این دستاورد فرصتی بی‌نظیر در اختیار علاقه‌مندان و متخصصان حوزه هوش مصنوعی
+                                    قرار می‌دهد؛ به‌طوری‌که افراد می‌توانند هم به‌صورت آموزشی از این فناوری بهره‌مند
+                                    شوند، و هم با استفاده از API اختصاصی ما، ماژول‌های دلخواه خود را توسعه داده و در
+                                    پروژه‌ها و نرم‌افزارهای مختلف پیاده‌سازی کنند — بدون نیاز به صرف منابع گسترده برای
+                                    طراحی و آموزش یک مدل هوش مصنوعی از پایه. نمونه‌هایی از ماژول‌های قابل‌پیاده‌سازی
+                                    شامل سیستم‌های ارتباطی ویژه افراد ناشنوا است، اما این تنها آغاز راه است؛ چرا که
+                                    گستره‌ی کاربردها تنها به خلاقیت و توان متخصصان محدود می‌شود. ما این بستر را فراهم
+                                    کرده‌ایم تا توسعه‌دهندگان ایرانی بتوانند هوش مصنوعی بومی‌شده را با ساده‌ترین روش در
+                                    نرم‌افزارهای خود به کار گیرند و گامی مهم در مسیر پیشرفت فناوری و تقویت زیرساخت‌های
+                                    دیجیتال کشور بردارند.
+                                    (جالب است بدانید: همین متن با کمک ماژول بازنویسی متن اختصاصی سامانه «هوش‌یار» تولید
+                                    شده است!😊) </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 hover:border-indigo-300 transition">
+                    <div class="feature-icon mb-4">
+                        <i class="fas fa-bolt text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">مزایای پروژه</h3>
+                    <ul class="text-gray-700 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>استفاده از قدرتمندترین مدل زبانی حال حاضر دنیا (GPT-4.1)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>پشتیبانی از زبان فارسی با شخصی‌سازی فرهنگی</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>طراحی ماژولار و توسعه‌پذیر</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 hover:border-indigo-300 transition">
+                    <div class="feature-icon mb-4">
+                        <i class="fas fa-chart-line text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">مزایای پروژه</h3>
+                    <ul class="text-gray-700 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>ارائه API عمومی و مستند برای برنامه‌نویسان</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>امکان گسترش به سایر حوزه‌ها مانند تحلیل تصویر، گفتار و زبان اشاره</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>پردازش سریع و آنی متون</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>یکی از ویژگی‌های برجسته این سامانه، ماژول تشخیص جعلی بودن اخبار است که با بررسی همزمان
+                                منابع معتبر، صحت خبر را ارزیابی می‌کند. این هوش مصنوعی با تحلیل دقیق محتوای متن و
+                                اطلاعات استخراج شده، نتیجه‌ای قابل اعتماد ارائه می‌دهد که به کاربران کمک می‌کند با آگاهی
+                                کامل از صحت اخبار، تصمیم‌گیری کنند.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 hover:border-indigo-300 transition">
+                    <div class="feature-icon mb-4">
+                        <i class="fas fa-shield-alt text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">امنیت و حریم خصوصی</h3>
+                    <ul class="text-gray-700 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>تمامی پردازش‌ها به صورت خودکار انجام می‌شود</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>عدم ذخیره‌سازی داده‌های کاربران پس از پردازش</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle text-xs text-indigo-600 mt-2 ml-2"></i>
+                            <span>استفاده از پروتکل‌های امنیتی پیشرفته</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">مسیر توسعه پروژه</h3>
+                <div class="relative">
+                    <div class="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -translate-y-1/2"></div>
+                    <div class="grid md:grid-cols-5 gap-4 relative">
+                        <div class="timeline-item relative">
+                            <div class="bg-indigo-100 p-4 rounded-lg text-center">
+                                <div
+                                    class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                                <h4 class="font-bold">خرداد ۱۴۰۳</h4>
+                                <p class="text-sm">شروع توسعه</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative">
+                            <div class="bg-indigo-100 p-4 rounded-lg text-center">
+                                <div
+                                    class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h4 class="font-bold">خرداد ۱۴۰۳</h4>
+                                <p class="text-sm">ساخت و بومی سازی هوش‌مصنوعی</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative">
+                            <div class="bg-indigo-100 p-4 rounded-lg text-center">
+                                <div
+                                    class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <i class="fas fa-paint-brush"></i>
+                                </div>
+                                <h4 class="font-bold">تیر ۱۴۰۳</h4>
+                                <p class="text-sm">طراحی Back-End</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative">
+                            <div class="bg-indigo-100 p-4 rounded-lg text-center">
+                                <div
+                                    class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <i class="fas fa-flask"></i>
+                                </div>
+                                <h4 class="font-bold">تیر ۱۴۰۳</h4>
+                                <p class="text-sm">طراحی رابط کاربری</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="bg-indigo-100 p-4 rounded-lg text-center">
+                                <div
+                                    class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <i class="fas fa-rocket"></i>
+                                </div>
+                                <h4 class="font-bold">آینده</h4>
+                                <p class="text-sm">گسترش ماژول‌های پیشرفته</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">اطلاعات فنی</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">تکنولوژی‌های استفاده‌شده در سامانه هوش‌یار</p>
+                <div class="w-20 h-1 bg-indigo-600 mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="tech-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 transition duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                            <i class="fab fa-php text-indigo-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mr-3">PHP 8</h3>
+                    </div>
+                    <p class="text-gray-700">
+                        زبان برنامه‌نویسی سمت سرور که برای پردازش درخواست‌ها و ارتباط با پایگاه داده استفاده شده است.
+                    </p>
+                </div>
+
+                <div class="tech-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 transition duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-database text-blue-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mr-3">MySQL</h3>
+                    </div>
+                    <p class="text-gray-700">
+                        سیستم مدیریت پایگاه داده رابطه‌ای برای ذخیره‌سازی اطلاعات کاربران و لاگ‌های سیستم.
+                    </p>
+                </div>
+
+                <div class="tech-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 transition duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-robot text-purple-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mr-3">GPT-4.1</h3>
+                    </div>
+                    <p class="text-gray-700">
+                        پیشرفته‌ترین مدل هوش مصنوعی OpenAI که هسته اصلی پردازش متون در این سامانه را تشکیل می‌دهد.
+                    </p>
+                </div>
+
+                <div class="tech-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 transition duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fab fa-js text-green-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mr-3">JavaScript</h3>
+                    </div>
+                    <p class="text-gray-700">
+                        برای ایجاد تعامل با کاربر و پردازش‌های سمت کلاینت در رابط کاربری استفاده شده است.
+                    </p>
+                </div>
+
+                <div class="tech-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 transition duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-bar text-yellow-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mr-3">Chart.js</h3>
+                    </div>
+                    <p class="text-gray-700">
+                        کتابخانه قدرتمند برای نمایش داده‌های تحلیلی به صورت نمودارهای تعاملی و گرافیکی.
+                    </p>
+                </div>
+
+                <div class="tech-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 transition duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-red-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mr-3">Liara AI</h3>
+                    </div>
+                    <p class="text-gray-700">
+                        دروازه امن برای ارتباط با APIهای هوش مصنوعی و مدیریت بهینه درخواست‌ها.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">ویژگی‌های فنی</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-gray-700 mb-2">بخش پردازش</h4>
+                        <ul class="text-gray-600 space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-indigo-600 mt-1 ml-2"></i>
+                                <span>ارتباط مستقیم با API رسمی OpenAI</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-indigo-600 mt-1 ml-2"></i>
+                                <span>پشتیبانی از پردازش همزمان چندین درخواست</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-indigo-600 mt-1 ml-2"></i>
+                                <span>بهینه‌سازی برای پردازش متون فارسی</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-gray-700 mb-2">امنیت و حریم خصوصی</h4>
+                        <ul class="text-gray-600 space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-indigo-600 mt-1 ml-2"></i>
+                                <span>محدودیت نرخ درخواست (Rate Limiting)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-indigo-600 mt-1 ml-2"></i>
+                                <span>لاگ‌گیری آدرس IP کاربران</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-indigo-600 mt-1 ml-2"></i>
+                                <span>اعتبارسنجی دقیق فرم‌های ورودی</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">تیم سازنده</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">افرادی که در توسعه این سامانه مشارکت داشته‌اند</p>
+                <div class="w-20 h-1 bg-indigo-600 mx-auto"></div>
+            </div>
+
+            <div class="flex justify-center">
+                <div class="bg-gray-50 p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl w-full">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/3 mb-6 md:mb-0 flex justify-center">
+                            <div class="relative">
+                                <div class="w-40 h-40 bg-indigo-100 rounded-full flex items-center justify-center">
+                                    <img src="https://i.postimg.cc/JzBWVhW4/my-avatar.png"
+                                        alt="تصویر کارتونی توسعه‌دهنده" class="w-full h-full object-cover rounded-full">
+                                </div>
+                                <div
+                                    class="absolute -bottom-2 -right-2 bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 md:mr-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">یاسین یاسمی</h3>
+                            <p class="text-gray-600 mb-4">توسعه‌دهنده اصلی و طراح سامانه هوش‌یار</p>
+
+                            <div class="bg-white p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 mb-3">
+                                    یاسین یاسمی، برنامه‌نویس جوان و پرانرژی ایرانی، از سنین پایین وارد دنیای
+                                    برنامه‌نویسی شده و همواره در تلاش برای یادگیری و تسلط بر زبان‌های برنامه‌نویسی مختلف
+                                    است.
+
+                                    با تخصص در توسعه وب، طراحی سیستم‌های هوش مصنوعی محور و یکپارچه‌سازی API، یاسین
+                                    مسئولیت طراحی ساختار کلی، رابط کاربری، پیاده‌سازی بخش بک‌اند و ارتباط با مدل GPT را
+                                    در پروژه «هوش‌یار» بر عهده داشته است.
+
+                                    وی در پروژه‌های مختلفی فعالیت داشته و در سال ۱۴۰۳ موفق به کسب گواهی‌نامه‌های PHP5 و
+                                    Python از المپیادهای ملی شده است.
+
+                                    برای آشنایی بیشتر با پروژه‌ها و دستاوردهای یاسین، می‌توانید به وب‌سایت رسمی او
+                                    مراجعه کنید: rapcher.ir
+                                </p>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2">
+                                <a href="https://rapcher.ir"
+                                    class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm flex items-center">
+                                    <i class="fas fa-globe ml-1"></i>
+                                    rapcher.ir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">آماده استفاده از هوش‌یار هستید؟</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">
+                همین حالا می‌توانید از امکانات این سامانه به صورت رایگان استفاده کنید یا برای دسترسی به API آن اقدام
+                نمایید.
+            </p>
+            <div class="flex justify-center space-x-4 space-x-reverse">
+                <button
+                    class="bg-white text-indigo-600 px-8 py-3 rounded-lg font-bold hover:bg-indigo-100 transition text-lg">
+                    شروع کنید
+                </button>
+                <button
+                    class="border border-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-indigo-600 transition text-lg">
+                    مستندات API
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 space-x-reverse mb-4">
+                        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-brain text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">هوش‌یار</h3>
+                    </div>
+                    <p class="mb-4">
+                        سامانه هوشمند تحلیل متون فارسی با استفاده از پیشرفته‌ترین فناوری‌های هوش مصنوعی
+                    </p>
+                    <div class="flex space-x-4 space-x-reverse">
+                        <a href="#"
+                            class="w-8 h-8 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://www.instagram.com/yasin_rapcher/"
+                            class="w-8 h-8 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-4">لینک‌های مفید</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="hover:text-white transition">صفحه اصلی</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-4">خدمات</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">تحلیل احساسات</a></li>
+                        <li><a href="#" class="hover:text-white transition">تشخیص اخبار جعلی</a></li>
+                        <li><a href="#" class="hover:text-white transition">اصلاح نگارشی</a></li>
+                        <li><a href="#" class="hover:text-white transition">تشخیص توهین</a></li>
+                        <li><a href="#" class="hover:text-white transition">بازنویسی متن</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-4">تماس با ما</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 ml-2"></i>
+                            <span>info@hooshyar.ir</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 ml-2"></i>
+                            <span>09</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 ml-2"></i>
+                            <span>تهران، ایران</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-gray-800 text-center">
+                <p>© 1404 هوش‌یار. تمامی حقوق محفوظ است.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuButton = document.querySelector('.md\\:hidden');
+            const navMenu = document.querySelector('nav ul');
+
+            mobileMenuButton.addEventListener('click', function () {
+                if (navMenu.classList.contains('hidden')) {
+                    navMenu.classList.remove('hidden');
+                    navMenu.classList.add('block', 'absolute', 'top-16', 'right-0', 'bg-white',
+                        'shadow-lg', 'p-4', 'w-full', 'z-50');
+                } else {
+                    navMenu.classList.add('hidden');
+                    navMenu.classList.remove('block', 'absolute', 'top-16', 'right-0', 'bg-white',
+                        'shadow-lg', 'p-4', 'w-full', 'z-50');
+                }
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
